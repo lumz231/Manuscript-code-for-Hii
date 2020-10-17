@@ -1,0 +1,35 @@
+import pandas as pd
+import numpy as np
+import random
+data = pd.read_csv("D:alldata.csv")
+x = data["Cpool"]
+y = data["HII"]
+def gradientDescent(x,y,theta,alpha,m,numIteration):
+    xTrans = x.transpose()
+    for i in range(0, numIteration):
+        hypothsis = np.dot(x, theta)
+        loss = hypothsis - y
+        cost = np.sum(loss ** 2) / (2 * m)
+        print("Iteration %d / Cost:%f" % (i, cost))
+        gradient = np.dot(xTrans, loss) / m
+        theta = theta - alpha * gradient
+    return theta
+
+def genData(numPoints,bais,variance):
+    x = np.zeros(shape=(numPoints, 2))
+    y = np.zeros(shape=numPoints)
+    for i in range(0, numPoints):
+        x[i][0] = 1
+        x[i][1] = i
+        y[i] = (i + bais) + random.uniform(0, 1) * variance
+    return x,y
+x,y = genData(100,25,10)
+print("x:",x)
+print("y:",y)
+m,n = np.shape(x)
+n_y = np.shape(y)
+numIteration = 200000
+alpha = 0.0005
+theta = np.ones(n)
+theta = gradientDescent(x,y,theta,alpha,m,numIteration)
+print(theta)
